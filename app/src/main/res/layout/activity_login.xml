@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="103dp"
+            android:layout_height="79dp"
+            android:layout_marginStart="152dp"
+            android:layout_marginTop="148dp"
+            android:layout_marginBottom="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bk" />
+
+        <TextView
+            android:id="@+id/tvLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="76dp"
+            android:text="Schedule Planner"
+            android:textColor="#3094C1"
+            android:textSize="40sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTaiKhoan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="104dp"
+            android:text="Tài Khoản"
+
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabel" />
+
+        <TextView
+            android:id="@+id/tvMatKhau"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="95dp"
+            android:text="Mật Khẩu"
+
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTaiKhoan" />
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="92dp"
+            android:background="@drawable/edtbackground"
+            android:drawableStart="@drawable/iclock"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtRegEmail"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        <EditText
+            android:id="@+id/edtRegEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="152dp"
+            android:ems="10"
+            android:background="@drawable/edtbackground"
+            android:inputType="textPersonName"
+            android:drawableStart="@drawable/ic_email"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLabel"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="142dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="132dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/edtbackground"
+            android:text="Đăng nhâp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtPassword"
+            app:rippleColor="#3094C1" />
+
+        <TextView
+            android:id="@+id/tvDangKy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="24dp"
+            android:text="Bạn chưa có tài khoản? Đăng ký"
+            android:textColor="#3094C1"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

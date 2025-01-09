@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <!-- Title Section -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm Nhiệm Vụ Mới"
+        android:gravity="center"
+        android:textColor="#49CEDF"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:padding="10dp" />
+
+    <!-- Title Input Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Tiêu Đề"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:id="@+id/etTieuDe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Title"
+            android:textStyle="bold"
+            android:minHeight="48dp" />
+    </LinearLayout>
+
+    <!-- Content Input Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Nội Dung"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:id="@+id/etNoiDung"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="Content"
+            android:textStyle="bold"
+            android:minHeight="48dp" />
+    </LinearLayout>
+
+    <!-- Date Input Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/inputDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Ngày Tạo"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp" />
+
+        <EditText
+            android:id="@+id/etNgayTao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:hint="dd/mm/yyyy"
+            android:inputType="none"
+        android:textStyle="bold"
+        android:minHeight="48dp" />
+    </LinearLayout>
+
+    <!-- Save and Cancel Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/SaveBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Lưu"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/CancelBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Hủy"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+
+</LinearLayout>
