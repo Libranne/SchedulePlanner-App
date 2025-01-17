@@ -3,17 +3,13 @@ package com.example.scheduleplanner
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.scheduleplanner.DBHelper
-import com.example.scheduleplanner.MainActivity
-import com.example.scheduleplanner.R
-import com.example.scheduleplanner.RegisterActivity
+import com.example.scheduleplanner.Database.DBHelper
 
 class LoginActivity : AppCompatActivity() {
 
@@ -58,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
             if (TextUtils.isEmpty(user) || TextUtils.isEmpty(pass)) {
                 Toast.makeText(this, "Yêu cầu nhập", Toast.LENGTH_SHORT).show()
             } else {
-                val checkUserPass = db.checkusernamepassword(user, pass)
+                val checkUserPass = db.checkUsernamePassword(user, pass)
                 if (checkUserPass) {
                     Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
                     val intent = Intent(applicationContext, MainActivity::class.java)

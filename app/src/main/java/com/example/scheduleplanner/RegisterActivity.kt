@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.scheduleplanner.Database.DBHelper
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -55,9 +56,9 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this@RegisterActivity, "Yêu cầu nhập", Toast.LENGTH_SHORT).show()
             } else {
                 if (pass == repass) {
-                    val checkUser = dbHelper.checkusername(user)
+                    val checkUser = dbHelper.checkUsername(user)
                     if (!checkUser) {
-                        val insert = dbHelper.insertDate(user, pass)
+                        val insert = dbHelper.insertUser(user, pass)
                         if (insert) {
                             Toast.makeText(this@RegisterActivity, "Đăng ký thành công", Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext, MainActivity::class.java)

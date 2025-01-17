@@ -2,69 +2,70 @@ package com.example.scheduleplanner
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.database.Cursor
+import com.example.scheduleplanner.Database.DBHelper
+import com.example.scheduleplanner.Database.Note
 
 class NoteProvider(private val context: Context) {
-    private val openHelper: DbOpenHelper = DbOpenHelper(context)  // Khởi tạo đối tượng DbOpenHelper
-    private lateinit var db: SQLiteDatabase // Đối tượng SQLiteDatabase để thao tác với CSDL
-
-    companion object {
-        const val TB_NAME = "tblNote"
-        const val _ID = "id"
-        const val TIEU_DE = "tieuDe"
-        const val NOI_DUNG = "noiDung"
-        const val NGAY_TAO = "ngayTao"
-    }
+    private val dbHelper: DBHelper = DBHelper(context) // Sử dụng DBHelper
+    private val TB_NAME = "tblNote"
 
     // Phương thức để thêm một ghi chú vào CSDL
     fun insNote(note: Note): Boolean {
-        db = openHelper.writableDatabase  // Lấy đối tượng CSDL với quyền ghi
+        val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(TIEU_DE, note.tieuDe)
-            put(NOI_DUNG, note.noiDung)
-            put(NGAY_TAO, note.ngayTao)
+            put("tieuDe", note.tieuDe)
+            put("noiDung", note.noiDung)
+            put("ngayTao", note.ngayTao)
         }
 
-        // Thực hiện câu lệnh INSERT
-        return db.insert(TB_NAME, null, values) != -1L
+        val result = db.insert(TB_NAME, null, values) != -1L
+        db.close()
+        return result
     }
 
     // Phương thức để cập nhật ghi chú
-    fun updNote(note: Note, tieuDe: String): Int {
-        db = openHelper.writableDatabase  // Lấy đối tượng CSDL với quyền ghi
+    fun updNote(note: Note): Int {
+        val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
-            put(NOI_DUNG, note.noiDung)
-            put(NGAY_TAO, note.ngayTao)
+            put("tieuDe", note.tieuDe)
+            put("noiDung", note.noiDung)
+            put("ngayTao", note.ngayTao)
         }
 
-        val whereArgs = arrayOf(tieuDe)  // Điều kiện để cập nhật
-        return db.update(TB_NAME, values, "$TIEU_DE = ?", whereArgs)
+        val whereArgs = arrayOf(note.id.toString())
+        val rowsUpdated = db.update(TB_NAME, values, "id = ?", whereArgs)
+        db.close()
+        return rowsUpdated
     }
 
     // Phương thức để xóa ghi chú
     fun delNote(id: String): Int {
-        db = openHelper.writableDatabase  // Lấy đối tượng CSDL với quyền ghi
-        return db.delete(TB_NAME, "$_ID = ?", arrayOf(id))
+        return try {
+            val db = dbHelper.writableDatabase
+            val rowsDeleted = db.delete(TB_NAME, "id = ?", arrayOf(id))
+            db.close()
+            rowsDeleted
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
     }
 
     // Phương thức để lấy tất cả ghi chú
     fun getAllNote(): ArrayList<Note> {
         val result = ArrayList<Note>()
-        db = openHelper.readableDatabase  // Lấy đối tượng CSDL với quyền đọc
+        val db = dbHelper.readableDatabase
         val sql = "SELECT * FROM $TB_NAME"
-        val cursor: Cursor = db.rawQuery(sql, null)
-
-        while (cursor.moveToNext()) {
-            val id = cursor.getInt(0)
-            val tieuDe = cursor.getString(1)
-            val noiDung = cursor.getString(2)
-            val ngayTao = cursor.getString(3)
-            val note = Note(id, tieuDe, noiDung, ngayTao)
-            result.add(note)
+        db.rawQuery(sql, null).use { cursor ->
+            while (cursor.moveToNext()) {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+                val tieuDe = cursor.getString(cursor.getColumnIndexOrThrow("tieuDe"))
+                val noiDung = cursor.getString(cursor.getColumnIndexOrThrow("noiDung"))
+                val ngayTao = cursor.getString(cursor.getColumnIndexOrThrow("ngayTao"))
+                result.add(Note(id, tieuDe, noiDung, ngayTao))
+            }
         }
-
-        cursor.close()  // Đảm bảo đóng cursor sau khi xong
+        db.close()
         return result
     }
 }

@@ -3,10 +3,10 @@ package com.example.scheduleplanner
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.scheduleplanner.Database.Note
 import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
@@ -17,6 +17,7 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var btnSave: Button
     private lateinit var btnCancel: Button
     private var msg = ""
+    private var userId = 0  // Thêm biến userId để lưu thông tin người dùng
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class AddNoteActivity : AppCompatActivity() {
         // Nhận dữ liệu từ Intent
         val intentReceipt = intent
         msg = intentReceipt.getStringExtra("action") ?: ""
+        userId = intentReceipt.getIntExtra("userId", 0) // Nhận userId từ Intent
 
         if (msg == "update") {
             // Set dữ liệu lên các trường EditText nếu là chế độ update
@@ -72,7 +74,7 @@ class AddNoteActivity : AppCompatActivity() {
         val tieuDe = etTieuDe.text.toString().trim()
         val noiDung = etNoiDung.text.toString().trim()
         val ngayTao = etNgayTao.text.toString().trim()
-        return Note(tieuDe, noiDung, ngayTao)
+        return Note(userId, tieuDe, noiDung, ngayTao)  // Thêm userId vào note
     }
 
     // Mở DatePicker để chọn ngày

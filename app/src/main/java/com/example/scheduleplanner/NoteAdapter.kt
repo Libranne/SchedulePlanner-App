@@ -6,57 +6,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import com.example.scheduleplanner.Database.Note
 
-class NoteAdapter(context: Context, private val listNote: ArrayList<Note>) :
-    ArrayAdapter<Note>(context, 0, listNote) {
-
-    private val noteProvider = NoteProvider(context)
-
-    // Đăng ký ActivityResultLauncher
-    private val activityResultLauncher: ActivityResultLauncher<Intent> =
-        (context as AppCompatActivity).registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                val note = result.data?.getSerializableExtra("note") as? Note
-                note?.let { updateNoteInList(it) }
-            }
-        }
+class NoteAdapter(
+    context: Context,
+    private val listNote: ArrayList<Note>,
+    private val activityResultLauncher: ActivityResultLauncher<Intent>,
+    private val onDeleteCallback: (Note) -> Unit // Callback for deleting the note
+) : ArrayAdapter<Note>(context, 0, listNote) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val curView = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_note, parent, false)
 
-        // Lấy đối tượng Note tại vị trí position
         val note = getItem(position)
-
-        // Lấy các view trong item_note
         val tvTieuDe = curView.findViewById<TextView>(R.id.tvTieuDe)
         val tvNgayTao = curView.findViewById<TextView>(R.id.tvNgayTao)
         val imgEdit = curView.findViewById<ImageButton>(R.id.Edit)
         val imgDel = curView.findViewById<ImageButton>(R.id.Delete)
+        val checkBox = curView.findViewById<CheckBox>(R.id.checkBox)
 
-        // Gắn dữ liệu vào các view
         tvTieuDe.text = note?.tieuDe
         tvNgayTao.text = note?.ngayTao
 
-        // Xử lý sự kiện click trên TextView Tiêu Đề để mở chi tiết ghi chú
+        // Sự kiện click mở chi tiết ghi chú
         tvTieuDe.setOnClickListener {
             note?.let {
-                // Tạo Intent để mở DetailNoteActivity và truyền dữ liệu ghi chú
                 val detailIntent = Intent(context, DetailNoteActivity::class.java)
-                detailIntent.putExtra("note", it)  // Truyền đối tượng Note đến Activity chi tiết
-                context.startActivity(detailIntent)  // Mở Activity chi tiết
+                detailIntent.putExtra("note", it)
+                context.startActivity(detailIntent)
             }
         }
 
-        // Xử lý sự kiện click trên ImageButton Edit
+        // Sự kiện click chỉnh sửa ghi chú
         imgEdit.setOnClickListener {
             note?.let {
                 val updIntent = Intent(context, AddNoteActivity::class.java)
@@ -66,49 +53,68 @@ class NoteAdapter(context: Context, private val listNote: ArrayList<Note>) :
             }
         }
 
-        // Xử lý sự kiện click trên ImageButton Delete
+        // Sự kiện click xóa ghi chú
         imgDel.setOnClickListener {
             note?.let {
                 showDeleteConfirmationDialog(it)
             }
         }
 
+        // Xử lý riêng sự kiện CheckBox
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                note?.let {
+                    handleCheckBox(it, checkBox)
+                }
+            }
+        }
+
         return curView
     }
 
+    /**
+     * Hiển thị thông báo khi người dùng nhấn vào CheckBox
+     */
+    private fun handleCheckBox(note: Note, checkBox: CheckBox) {
+        AlertDialog.Builder(context)
+            .setTitle("Xác nhận")
+            .setMessage("Bạn đã hoàn thành nhiệm vụ '${note.tieuDe}'?")
+            .setPositiveButton("Đồng ý") { _, _ ->
+                deleteNoteFromDatabase(note)
+                Toast.makeText(context, "Bạn đã hoàn thành nhiệm vụ này!", Toast.LENGTH_SHORT).show()
+                checkBox.isChecked = true
+            }
+            .setNegativeButton("Hủy") { _, _ ->
+                checkBox.isChecked = false
+            }
+            .show()
+    }
+
+    /**
+     * Hiển thị dialog xác nhận xóa ghi chú
+     */
     private fun showDeleteConfirmationDialog(note: Note) {
         AlertDialog.Builder(context)
             .setTitle("Xóa ghi chú")
             .setMessage("Bạn có chắc chắn muốn xóa ghi chú có tiêu đề '${note.tieuDe}'?")
             .setPositiveButton("Đồng ý") { _, _ ->
-                val isDeleted = deleteNoteFromDatabase(note)
-                if (isDeleted) {
-                    Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Không thể xóa ghi chú", Toast.LENGTH_SHORT).show()
-                }
+                deleteNoteFromDatabase(note)
+                onDeleteCallback(note) // Notify the caller to remove the note from the data source
+                Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Hủy", null)
             .show()
     }
 
-    private fun deleteNoteFromDatabase(note: Note): Boolean {
-        val isDeleted = noteProvider.delNote(note.id.toString()) > 0
-        if (isDeleted) {
-            listNote.remove(note) // Xóa ghi chú khỏi danh sách
-            notifyDataSetChanged() // Cập nhật lại giao diện
-        }
-        return isDeleted
+    private fun deleteNoteFromDatabase(note: Note) {
+        listNote.remove(note)
+        notifyDataSetChanged()
     }
 
-    private fun updateNoteInList(note: Note): Boolean {
-        val index = listNote.indexOfFirst { it.id == note.id }
-        return if (index != -1) {
-            listNote[index] = note // Cập nhật ghi chú trong danh sách
-            notifyDataSetChanged() // Cập nhật lại giao diện
-            true
-        } else {
-            false
-        }
+    // Method to update the data in the adapter
+    fun updateData(newList: List<Note>) {
+        listNote.clear()
+        listNote.addAll(newList)
+        notifyDataSetChanged()
     }
 }

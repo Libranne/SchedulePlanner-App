@@ -1,6 +1,7 @@
 
 package com.example.scheduleplanner
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
@@ -14,12 +15,13 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.scheduleplanner.fragment.CalendarFragment
 import com.example.scheduleplanner.fragment.ContactFragment
 import com.example.scheduleplanner.fragment.HomeFragment
-import com.example.scheduleplanner.fragment.CalendarFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,7 +39,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation)
         mDrawerLayout = findViewById(R.id.drawer_layout)
@@ -90,6 +91,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 openContactFragment()
                 mBottomNavigationView.menu.findItem(R.id.bottom_contact).isChecked = true
             }
+            R.id.logout -> {
+                logOut()
+            }
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START)
@@ -100,6 +104,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (mCurrentFragment != FRAGMENT_HOME) {
             replaceFragment(HomeFragment())
             mCurrentFragment = FRAGMENT_HOME
+
         }
     }
 
@@ -115,6 +120,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             replaceFragment(ContactFragment())
             mCurrentFragment = FRAGMENT_CONTACT
         }
+    }
+
+    private fun logOut() {
+        // Here, you can clear any session or authentication state if needed (e.g., shared preferences)
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish() // Close the current activity
     }
 
     override fun onBackPressed() {

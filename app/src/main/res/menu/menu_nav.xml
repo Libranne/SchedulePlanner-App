@@ -25,6 +25,10 @@
                 android:title="@string/nav_password"
                 android:icon="@drawable/ic_lock"/>
 
+            <item android:id="@+id/logout"
+            android:title="@string/nav_logout"
+                android:icon="@drawable/ic_logout"/>
+
         </menu>
     </item>
 </menu>
