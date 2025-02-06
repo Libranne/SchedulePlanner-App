@@ -1,14 +1,12 @@
-Schedule Planner 06/2024-08/2024
-    A simple application for listing prioritized tasks.
-    Personal Project
-    Responsibilities :
-    Design and develop user interfaces, including screen design and
-    navigation implementation.
-    Handle basic required functionalities such as CRUD for notes,
-    viewing the calendar, and more.
-    Format screens to ensure compatibility with user interactions.
+Schedule Planner 
+   
+A simple application for listing prioritized tasks.
+
+    
 Technologies : Kotlin, SQLite
+
 Key Features:
+
   Task Prioritization:
     Users can create, edit, and delete tasks.
     Set priority levels for tasks.
