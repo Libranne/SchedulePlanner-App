@@ -26,7 +26,9 @@ Key Features:
   
   Data Persistence:
     Task data stored locally using SQLite for offline access.
+    
 Image demo:
+
 ![image](https://github.com/user-attachments/assets/941ae82e-a0a7-4ed8-a012-cce9d2ba7ff1)
 ![image](https://github.com/user-attachments/assets/9d36dec7-59a3-47e5-9395-4ccaef2e1894)
 ![image](https://github.com/user-attachments/assets/8ac3e2fd-70a1-49a0-a471-a43dfd4887c5)
